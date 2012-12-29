@@ -4,9 +4,9 @@
 *.DS_Store
 *.swp
 *.out
-
-/project*
 /target*
+project/project
+project/target
 .project
 .classpath
 .history
