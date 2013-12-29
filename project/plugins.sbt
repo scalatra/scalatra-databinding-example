@@ -1,2 +1,2 @@
-libraryDependencies <+= sbtVersion(v => "com.github.siasia" %% "xsbt-web-plugin" % (v+"-0.2.11.1"))
+addSbtPlugin("org.scalatra.sbt" %% "scalatra-sbt" % "0.3.3")
 

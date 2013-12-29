@@ -11,3 +11,5 @@ project/target
 .classpath
 .history
 .cache
+.idea
+.idea_modules

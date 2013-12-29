@@ -12,6 +12,8 @@ import org.scalatra.commands._
 // Scalatra's JSON-handling code
 import org.scalatra.json._
 import org.json4s.{DefaultFormats, Formats}
+import scalaz.std.string._
+import scalaz.syntax.std.option._
 
 /**
  * A class to keep our custom String validations in.
@@ -30,7 +32,7 @@ class TodosStringValidations(b: FieldDescriptor[String]) {
 /** Set up an abstract class to inherit from, so we don't need to keep on
  *  repeating the `extends ModelCommand[T]` in every command we make.
  */
-abstract class TodosCommand[S](implicit mf: Manifest[S]) extends ModelCommand[S] with JsonCommand {
+trait TodosCommand[S] extends JsonCommand {
   
   /**
    * Pimp the [org.scalatra.commands.FieldDescriptor] class with our [TodosStringValidations]
@@ -38,6 +40,12 @@ abstract class TodosCommand[S](implicit mf: Manifest[S]) extends ModelCommand[S]
    * This adds the validation to the binding for the FieldDescriptor's b.validateWith function.
    */
   implicit def todoStringValidators(b: FieldDescriptor[String]) = new TodosStringValidations(b)
+}
+
+object CreateTodoCommand {
+  // Putting the implicit conversion in the companion object of the create todos command ensures it's the default fallback
+  // for implicit resolution.
+  implicit def createTodoCommandAsTodo(cmd: CreateTodoCommand): Todo = Todo(~cmd.name.value)
 }
 
 /** A command to validate and create Todo objects. */

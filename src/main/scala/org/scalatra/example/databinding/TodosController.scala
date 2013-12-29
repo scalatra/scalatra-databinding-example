@@ -33,8 +33,11 @@ class TodosController extends ScalatraServlet with ScalateSupport
   }
 
   post("/todos") {
-    val cmd = command[CreateTodoCommand]
-    TodoData.execute(cmd).fold(
+    // You can use the word `execute` as an alternative to the method `>>`
+    // This method takes a function that takes either a command or something the command can be implicitly converted to
+    // The result of the method should be a ModelValidation[S]
+    // So one could say the execute method takes a Funtion: Command => ModelValidation[S] or (Command <% T) => ModelValidation[S]
+    (command[CreateTodoCommand] >> (TodoData.add(_))).fold(
       errors => halt(400, errors),
       todo => redirect("/")
     )
